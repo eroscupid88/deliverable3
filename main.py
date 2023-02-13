@@ -21,7 +21,8 @@ class MainWindow(QtWidgets.QMainWindow,main_window_ui.Ui_MainWindow):
         self.parkingLot = [0,1,1,1,0]
         self.client = request_client.MqttClient(self.broker,self.port,self.topic,self.name,None)
         self.client.messageReceived.connect(self.displaySensorData)
-        self.client.run_subscribe()
+
+        self.client.start()
         
 
 
@@ -46,17 +47,17 @@ class MainWindow(QtWidgets.QMainWindow,main_window_ui.Ui_MainWindow):
         
     def displaySensorData(self,message):
         print(f"something is up??\naaaa: {message}")
-        self.displaySensorDataMessage.append(message)
+        self.displaySensorDataMessage.setText(message)
 
     def sendCommand(self):
         print("send command to rpi4")
         self.displaySensorDataMessage.setText("Hello World")
         self.parkingLot1.setChecked(True)
-            
+
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
     mainWindow = MainWindow()
     mainWindow.show()
-    print('wtf')
     sys.exit(app.exec_())
