@@ -17,10 +17,10 @@
    <widget class="QTextEdit" name="displaySensorDataMessage">
     <property name="geometry">
      <rect>
-      <x>730</x>
+      <x>630</x>
       <y>50</y>
-      <width>211</width>
-      <height>70</height>
+      <width>311</width>
+      <height>141</height>
      </rect>
     </property>
    </widget>
@@ -97,45 +97,32 @@
      </item>
     </layout>
    </widget>
-   <widget class="QGroupBox" name="groupBox">
+   <widget class="QPlainTextEdit" name="message_to_displace">
     <property name="geometry">
      <rect>
-      <x>690</x>
-      <y>210</y>
+      <x>520</x>
+      <y>240</y>
       <width>231</width>
-      <height>131</height>
+      <height>91</height>
      </rect>
     </property>
-    <property name="title">
-     <string>GroupBox</string>
-    </property>
-    <widget class="QPlainTextEdit" name="message_to_displace">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>231</width>
-       <height>91</height>
-      </rect>
-     </property>
-     <property name="plainText">
-      <string>Send Command
+    <property name="plainText">
+     <string>Send Command
 </string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="messageButton">
-     <property name="geometry">
-      <rect>
-       <x>130</x>
-       <y>90</y>
-       <width>100</width>
-       <height>36</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>send</string>
-     </property>
-    </widget>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="messageButton">
+    <property name="geometry">
+     <rect>
+      <x>650</x>
+      <y>340</y>
+      <width>100</width>
+      <height>36</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>send</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
