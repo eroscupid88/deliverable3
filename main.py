@@ -45,7 +45,8 @@ class MainWindow(QtWidgets.QMainWindow,main_window_ui.Ui_MainWindow):
         print("send warn off light!!!")
         
     def displaySensorData(self,message):
-        self.displaySensorDataMessage.setText(message)
+        print(f"something is up??\naaaa: {message}")
+        self.displaySensorDataMessage.append(message)
 
     def sendCommand(self):
         print("send command to rpi4")
@@ -54,7 +55,8 @@ class MainWindow(QtWidgets.QMainWindow,main_window_ui.Ui_MainWindow):
             
 
 if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
+    app = QtWidgets.QApplication([])
     mainWindow = MainWindow()
     mainWindow.show()
+    print('wtf')
     sys.exit(app.exec_())

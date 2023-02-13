@@ -15,8 +15,8 @@ class MqttClient(QThread):
     """
         construction
     """
-    def __init__(self,broker,port,topic,name,rpi):
-        super().__init__()
+    def __init__(self,broker,port,topic,name,rpi,parent=None):
+        super().__init__(parent)
         self.encryption = encryption.EncryptionObject('filekey.key')
         self.broker =broker
         self.port = port
