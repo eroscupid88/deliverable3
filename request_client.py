@@ -6,6 +6,7 @@ import joystick
 import sensor_MPU6050
 import encryption
 import time
+import main
 class MqttClient(object):
     """
         construction
@@ -24,6 +25,7 @@ class MqttClient(object):
         else:
             self.rpi = rpi
         print(self.rpi)
+       
 
     """
         connect mqtt function connect client with broker and return the client
@@ -71,7 +73,7 @@ class MqttClient(object):
     """
         publish function take mqtt_client and a string message as parameters, publish message to broker
     """
-    def publish(self,client,rpi):
+    def publish(self,client,rpi,msg):
         if rpi != None:
             time.sleep(1)
             rpi.sendData()
@@ -83,12 +85,12 @@ class MqttClient(object):
 
         else:
             print(f"[Sending Message from GUI] :\n")
-            client.publish(self.topic1,"here is the response to rpi")
+            client.publish(self.topic1,msg)
 
 
-    def run_publish(self):
+    def run_publish(self,msg):
         self.client.loop_start()
-        self.publish(self.client,self.rpi)
+        self.publish(self.client,self.rpi,msg)
         self.subscribe(self.client,self.rpi)
         self.client.loop_forever()
 
@@ -106,6 +108,9 @@ if __name__ == '__main__':
     topic = 'CME466-deliverable3'
     joystick = joystick.JoyStick()
     sensor = sensor_MPU6050.Sensor_Mpu6050()
+    #app  = main.QtWidgets.QApplication(main.sys.argv)
+    #mainWindow = main.MainWindow()
+    #mainWindow.show()
     rpi = rpi4.Rpi4(sensor,joystick)
     client =MqttClient(broker,port,topic,name,rpi)
     try:
