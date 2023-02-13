@@ -21,7 +21,7 @@ class MainWindow(QtWidgets.QMainWindow,main_window_ui.Ui_MainWindow):
         self.parkingLot = [0,1,1,1,0]
         self.client = request_client.MqttClient(self.broker,self.port,self.topic,self.name,None)
         self.client.messageReceived.connect(self.displaySensorData)
-        self.loop()
+        self.client.run_subscribe()
         
 
 
@@ -51,9 +51,7 @@ class MainWindow(QtWidgets.QMainWindow,main_window_ui.Ui_MainWindow):
         print("send command to rpi4")
         self.displaySensorDataMessage.setText("Hello World")
         self.parkingLot1.setChecked(True)
-    def loop(self):
-        while True:
-            self.client.run_subscribe()
+            
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
