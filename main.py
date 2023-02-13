@@ -50,6 +50,8 @@ class MainWindow(QtWidgets.QMainWindow,main_window_ui.Ui_MainWindow):
         print("send command to rpi4")
         self.displaySensorDataMessage.setText("Hello World")
         self.parkingLot1.setChecked(True)
+
+
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     mainWindow = MainWindow()
