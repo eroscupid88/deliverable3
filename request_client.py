@@ -22,7 +22,7 @@ class MqttClient(object):
         self.topic =topic
         self.light_command = 0
         self.received_message = ''
-        self.topic1 ="ho"
+        self.topic1 ="another-topic"
         self.client_id = f'dtv782-{name}-client-mqtt-{random.randint(1000,2000)}'
         self.rpi = None
         self.client = self.connect_mqtt()
@@ -97,12 +97,12 @@ class MqttClient(object):
         self.client.loop_start()
         self.publish(self.client,self.rpi,msg)
         self.subscribe(self.client,self.rpi)
-        self.client.loop_forever()
+        #self.client.loop_forever()
 
     def run_subscribe(self):
         #self.client.loop_start()
-        self.subscribe(self.client,self.rpi,callback)
-        self.client.loop_forever()
+        self.subscribe(self.client,self.rpi)
+        #self.client.loop_forever()
 
     def disconnect(self):
         pass
