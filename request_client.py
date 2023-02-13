@@ -9,7 +9,7 @@ import time
 import main
 from PyQt5.QtCore import QThread, pyqtSignal, QObject
 
-class MqttClient(QObject):
+class MqttClient(QThread):
     messageReceived =pyqtSignal(str)
 
     """
@@ -64,7 +64,6 @@ class MqttClient(QObject):
             print(f"[Received Message from RPI]: \n{message}")
             self.messageReceived.emit(message)
 
-            self.publish(self.client,self.rpi)
         def on_message_response(client,userdata,msg):
             message = msg.payload.decode()
             print(f"[Received Message from GUI]: \n{message}")
@@ -81,13 +80,14 @@ class MqttClient(QObject):
     """
     def publish(self,client,rpi,msg):
         if rpi != None:
-            time.sleep(1)
-            rpi.sendData()
-            msg_array = rpi.parking_data
-            msg = ' '.join(str(i) for i in msg_array)
-            msg = msg + '\n' + rpi.sensor.toString()
-            client.publish(self.topic,msg)
-            print(f"[Sending Message from RPI]: \n{msg}")
+            while True:
+                time.sleep(1)
+                rpi.sendData()
+                msg_array = rpi.parking_data
+                msg = ' '.join(str(i) for i in msg_array)
+                msg = msg + '\n' + rpi.sensor.toString()
+                client.publish(self.topic,msg)
+                print(f"[Sending Message from RPI]: \n{msg}")
 
         else:
             print(f"[Sending Message from GUI] :\n")
@@ -103,7 +103,7 @@ class MqttClient(QObject):
     def run_subscribe(self):
         #self.client.loop_start()
         self.subscribe(self.client,self.rpi)
-        #self.client.loop_forever()
+        self.client.loop_forever()
 
     def disconnect(self):
         pass
@@ -120,7 +120,7 @@ if __name__ == '__main__':
     rpi = rpi4.Rpi4(sensor,joystick)
     client =MqttClient(broker,port,topic,name,rpi)
     try:
-        client.run_publish("message")
+        client.run_publish(None)
     except KeyboardInterrupt:
         client.disconnect()
 
