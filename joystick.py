@@ -88,6 +88,7 @@ class JoyStick(object):
                 print(tmp)
                 status = tmp
             time.sleep(1)
+            print(self.mode)
             
     def destroy(self):
         pass
