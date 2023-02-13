@@ -119,7 +119,7 @@ if __name__ == '__main__':
     rpi = rpi4.Rpi4(sensor,joystick)
     client =MqttClient(broker,port,topic,name,rpi)
     try:
-        client.run_publish()
+        client.run_publish("message")
     except KeyboardInterrupt:
         client.disconnect()
 
