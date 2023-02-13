@@ -7,7 +7,11 @@ import sensor_MPU6050
 import encryption
 import time
 import main
+from PyQt5.QtCore import QThread, pyptSignal
+
 class MqttClient(object):
+    messageReceived =pyqtSignal(str)
+
     """
         construction
     """
@@ -16,6 +20,8 @@ class MqttClient(object):
         self.broker =broker
         self.port = port
         self.topic =topic
+        self.light_command = 0
+        self.received_message = ''
         self.topic1 ="ho"
         self.client_id = f'dtv782-{name}-client-mqtt-{random.randint(1000,2000)}'
         self.rpi = None
@@ -55,13 +61,12 @@ class MqttClient(object):
         def on_message(client,userdata,msg):
             message = msg.payload.decode()
             print(f"[Received Message from RPI]: \n{message}")
-            ## need to do something with GUI
+            self.messageReceived.emit(message)
 
             self.publish(self.client,self.rpi)
         def on_message_response(client,userdata,msg):
             message = msg.payload.decode()
             print(f"[Received Message from GUI]: \n{message}")
-            # dosomething with rpi
 
         if rpi== None:
             client.subscribe(self.topic)
@@ -96,7 +101,7 @@ class MqttClient(object):
 
     def run_subscribe(self):
         #self.client.loop_start()
-        self.subscribe(self.client,self.rpi)
+        self.subscribe(self.client,self.rpi,callback)
         self.client.loop_forever()
 
     def disconnect(self):
