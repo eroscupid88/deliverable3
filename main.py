@@ -11,12 +11,23 @@ class MainWindow(QtWidgets.QMainWindow,main_window_ui.Ui_MainWindow):
         self.warnOnButton.clicked.connect(self.sendWarnOnLight)
         self.warnOffButton.clicked.connect(self.sendWarnOffLight)
         self.messageButton.clicked.connect(self.sendCommand)
+        self.dic = {0:self.parkingLot1,1:self.parkingLot2,2: self.parkingLot3,3:self.parkingLot4,4:self.parkingLot5}
+        self.parkingLot = [0,1,1,1,0]
 
-    def sendWarnOnLight(self):
-        print("send warn on light!!!")
-    
+
+    def sendWarnOnLight(self,number):
+        print(f"send warn on light!!!{number}")
+        
+    def setParkingLot(self,data):
+        self.parkingLot = data
+
+    def showParkingLot(self):
+        for index,value in enumerate(self.parkingLot):
+            print(index, value)
+            self.dic[index].setChecked(value)
     def sendWarnOffLight(self):
         print("send warn off light!!!")
+        self.displaySensorDataMessage.setText(None)
 
     def sendCommand(self):
         print("send command to rpi4")
