@@ -10,7 +10,7 @@ import main
 from PyQt5.QtCore import QThread, pyptSignal
 
 class MqttClient(object):
-    messageReceived =pyqtSignal(str)
+    messageReceived =pyptSignal(str)
 
     """
         construction
