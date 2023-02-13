@@ -7,10 +7,10 @@ import sensor_MPU6050
 import encryption
 import time
 import main
-from PyQt5.QtCore import QThread, pyptSignal
+from PyQt5.QtCore import QThread, pyqtSignal
 
 class MqttClient(object):
-    messageReceived =pyptSignal(str)
+    messageReceived =pyqtSignal(str)
 
     """
         construction
