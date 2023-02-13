@@ -7,15 +7,16 @@ import sensor_MPU6050
 import encryption
 import time
 import main
-from PyQt5.QtCore import QThread, pyqtSignal
+from PyQt5.QtCore import QThread, pyqtSignal, QObject
 
-class MqttClient(object):
+class MqttClient(QObject):
     messageReceived =pyqtSignal(str)
 
     """
         construction
     """
     def __init__(self,broker,port,topic,name,rpi):
+        super().__init__()
         self.encryption = encryption.EncryptionObject('filekey.key')
         self.broker =broker
         self.port = port
