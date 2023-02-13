@@ -3,6 +3,7 @@ import sys
 import main_window_ui
 from PyQt5.QtWidgets import QMessageBox
 import request_client
+import re
 
 class MainWindow(QtWidgets.QMainWindow,main_window_ui.Ui_MainWindow):
     broker = '10.64.98.135'
@@ -46,8 +47,12 @@ class MainWindow(QtWidgets.QMainWindow,main_window_ui.Ui_MainWindow):
         print("send warn off light!!!")
         
     def displaySensorData(self,message):
-        print(f"something is up??\naaaa: {message}")
-        self.displaySensorDataMessage.setText(message)
+        messages = re.split("\n",message)
+        parking_data = [i for i in re.split(' ',messages[0])]
+        sensor = '\n'.join(messages[1:len(messages)])
+        print(parking_data)
+        print(messages)
+        self.displaySensorDataMessage.setText(sensor)
 
     def sendCommand(self):
         print("send command to rpi4")
