@@ -30,25 +30,18 @@ class MainWindow(QtWidgets.QMainWindow,main_window_ui.Ui_MainWindow):
 
     def sendWarnOnLight(self):
         self.client.run_publish(self.topic1,1)
-        
+    def sendWarnOffLight(self):
+        self.client.run_publish(self.topic1,0) 
     def setParkingLot(self,data):
         self.parkingLot = data
-
-    def toggleParking(self):
-        self.parkingLot1.setChecked(self.light)
-    
-    def toggle(self):
-        self.light !=self.light
 
     def showParkingLot(self):
         for index,value in enumerate(self.parkingLot):
             self.dic[index].setChecked(value)
-    def sendWarnOffLight(self):
-        self.client.run_publish(self.topic1,0) 
+    
     def displaySensorData(self,message):
         messages = re.split("\n",message)
-        parking_data = [i for i in re.split(' ',messages[0])]
-
+        self.parking_data = [int(i) for i in re.split(' ',messages[0])]
         sensor = '\n'.join(messages[1:len(messages)])
         self.displaySensorDataMessage.setText(sensor)
         self.showParkingLot()
