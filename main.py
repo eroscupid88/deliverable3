@@ -10,6 +10,7 @@ class MainWindow(QtWidgets.QMainWindow,main_window_ui.Ui_MainWindow):
     port = 1883
     name = 'publisher'
     topic = 'CME466-deliverable3'
+    topic1 = 'another-topic'
 
     def __init__(self):
         super(MainWindow,self).__init__()
@@ -19,8 +20,8 @@ class MainWindow(QtWidgets.QMainWindow,main_window_ui.Ui_MainWindow):
         self.warnOffButton.clicked.connect(self.sendWarnOffLight)
         self.messageButton.clicked.connect(self.sendCommand)
         self.dic = {0:self.parkingLot1,1:self.parkingLot2,2: self.parkingLot3,3:self.parkingLot4,4:self.parkingLot5}
-        self.parkingLot = [0,1,1,1,0]
-        self.client = request_client.MqttClient(self.broker,self.port,self.topic,self.name,None)
+        self.parkingLot = [0,0,0,0,0]
+        self.client = request_client.MqttClient(self.broker,self.port,self.topic,self.topic1,self.name,None)
         self.client.messageReceived.connect(self.displaySensorData)
 
         self.client.start()
@@ -28,8 +29,7 @@ class MainWindow(QtWidgets.QMainWindow,main_window_ui.Ui_MainWindow):
 
 
     def sendWarnOnLight(self):
-        print(f"send warn on light!!")
-        self.client.run_publish("1")
+        self.client.run_publish(self.topic1,1)
         
     def setParkingLot(self,data):
         self.parkingLot = data
@@ -44,8 +44,7 @@ class MainWindow(QtWidgets.QMainWindow,main_window_ui.Ui_MainWindow):
         for index,value in enumerate(self.parkingLot):
             self.dic[index].setChecked(value)
     def sendWarnOffLight(self):
-        print("send warn off light!!!")
-        
+        self.client.run_publish(self.topic1,0) 
     def displaySensorData(self,message):
         messages = re.split("\n",message)
         parking_data = [i for i in re.split(' ',messages[0])]
@@ -55,10 +54,8 @@ class MainWindow(QtWidgets.QMainWindow,main_window_ui.Ui_MainWindow):
         self.showParkingLot()
 
     def sendCommand(self):
-        print("send command to rpi4")
-        self.displaySensorDataMessage.setText("Hello World")
-        self.parkingLot1.setChecked(True)
-
+        message = self.message_to_displace.toPlainText()
+        self.client.run_publish(self.topic1,message)
 
 
 if __name__ == "__main__":

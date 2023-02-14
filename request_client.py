@@ -1,12 +1,8 @@
 #!/urs/bin/python3
 from paho.mqtt import client as mqtt_client
 import random
-import rpi4
-import joystick
-import sensor_MPU6050
 import encryption
 import time
-import main
 from PyQt5.QtCore import QThread, pyqtSignal, QObject
 
 class MqttClient(QThread):
@@ -15,7 +11,7 @@ class MqttClient(QThread):
     """
         construction
     """
-    def __init__(self,broker,port,topic,name,rpi,parent=None):
+    def __init__(self,broker,port,topic,topic1,name,parent=None):
         super().__init__(parent)
         self.encryption = encryption.EncryptionObject('filekey.key')
         self.broker =broker
@@ -23,15 +19,9 @@ class MqttClient(QThread):
         self.topic =topic
         self.light_command = 0
         self.received_message = ''
-        self.topic1 ="another-topic"
+        self.topic1 = topic1
         self.client_id = f'dtv782-{name}-client-mqtt-{random.randint(1000,2000)}'
-        self.rpi = None
         self.client = self.connect_mqtt()
-        if rpi == None:
-            pass
-        else:
-            self.rpi = rpi
-        print(self.rpi)
        
 
     """
@@ -58,56 +48,56 @@ class MqttClient(QThread):
 
         return: None
     """
-    def subscribe(self,client,rpi):
+    def subscribe(self,client,topic):
         def on_message(client,userdata,msg):
             message = msg.payload.decode()
             self.messageReceived.emit(message)
-            #client.disconnect()
 
         def on_message_response(client,userdata,msg):
             message = msg.payload.decode()
-            print(f"[Received Message from GUI]: \n{message}")
-            rpi.setWarningLight(int(message))
-            rpi.run_display()
+            print(f"[Received Message from GUI with topic `{topic}`]: \n{message}")
 
-        if rpi== None:
-            client.subscribe(self.topic)
+        if topic == self.topic:
+            client.subscribe(topic)
             client.on_message = on_message
-        else:
-            client.subscribe(self.topic1)
-            client.on_message = on_message_response
+        elif topic == self.topic1:
+            print(topic)
+           # client.subscribe(topic)
+          #  client.on_message = on_message_response
 
     """
         publish function take mqtt_client and a string message as parameters, publish message to broker
     """
-    def publish(self,client,rpi,msg):
-        if rpi != None:
-            while True:
-                time.sleep(1)
-                rpi.sendData()
-                msg_array = rpi.parking_data
-                msg = ' '.join(str(i) for i in msg_array)
-                msg = msg + '\n' + rpi.sensor.toString()
-                client.publish(self.topic,msg)
-                print(f"[Sending Message from RPI]: \n{msg}")
-                self.subscribe(client,rpi)
+    def publish(self,client,topic,msg):
+        if topic == self.topic:
+            time.sleep(1)
+
+            client.subscribe(self.topic1)
+            client.publish(topic,msg)
+            #print(f"[Sending Message from RPI with topic `{topic}`]: \n{msg}")
+
 
         else:
-            print(f"[Sending Message from GUI] :\n")
-            client.publish(self.topic1,msg)
+            print(f"[Sending Message from GUI with topic `{topic}`] :\n")
+            client.publish(topic,msg)
             print(f"Message to RPI is:{msg}")
 
 
-    def run_publish(self,msg):
+    def run_publish(self,topic,msg):
         self.client.loop_start()
-        self.publish(self.client,self.rpi,msg)
-        self.subscribe(self.client,self.rpi)
+        self.publish(self.client,topic,msg)
+        if topic == self.topic
+            self.subscribe(self.client,topic)
         #self.client.loop_forever()
 
     def run(self):
         self.client.loop_start()
-        self.subscribe(self.client,self.rpi)
+        self.subscribe(self.client,self.topic)
         #self.client.loop_forever()
+
+    def run_sub(self):
+        self.client.loop_start()
+        self.subscribe(self.client,self.topic1)
 
     def disconnect(self):
         pass
@@ -116,13 +106,7 @@ if __name__ == '__main__':
     port = 1883
     name = 'subscribe'
     topic = 'CME466-deliverable3'
-    joystick = joystick.JoyStick()
-    sensor = sensor_MPU6050.Sensor_Mpu6050()
-    #app  = main.QtWidgets.QApplication(main.sys.argv)
-    #mainWindow = main.MainWindow()
-    #mainWindow.show()
-    rpi = rpi4.Rpi4(sensor,joystick)
-    client =MqttClient(broker,port,topic,name,rpi)
+    client =MqttClient(broker,port,topic,name)
     try:
         client.run_publish(None)
     except KeyboardInterrupt:

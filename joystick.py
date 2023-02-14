@@ -52,7 +52,7 @@ class JoyStick(object):
         Return: a String type
     """
     def direction(self):
-        print(f"0:{self.ADC.read(0)}\n 1:{self.ADC.read(1)}\n2: {self.ADC.read(2)}")
+        #print(f"0:{self.ADC.read(0)}\n 1:{self.ADC.read(1)}\n2: {self.ADC.read(2)}")
         state = ['home','parkingSlot1','parkingSlot2','parkingSlot3','parkingSlot4','pressed', 'parkingSlot5']
         i = 0
         if (self.ADC.read(1) == 255 and self.ADC.read(2) == 128):

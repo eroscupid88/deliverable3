@@ -5,6 +5,7 @@ import time
 import encryption
 import RPi.GPIO as GPIO
 from enum import Enum
+import request_client
 
 class State(Enum):
     PARKING_CONTROL = 1
@@ -13,15 +14,21 @@ class State(Enum):
 
 
 class Rpi4(object):
+    broker ='10.64.98.135'
+    port = 1883
+    name = 'publish'
+    topic = 'CME466-deliverable3'
+    topic1 = 'another-topic'
 
     def __init__(self,sensor,joystick):
         super().__init__()
+        self.mqttClient = request_client.MqttClient(self.broker,self.port,self.topic,self.topic1,self.name)
         self.state = State.DISPLAY 
         self.sensor = sensor
         self.joystick = joystick
         self.board_message = ''
         self.sensor_data = ''
-        self.warning_light = 0
+        self.warning_light = 1
         self.parking_data = [0,0,0,0,0]    
         #initial variables fro GPIO
         self.lightPins = (12,13,16)
@@ -42,13 +49,11 @@ class Rpi4(object):
     def setWarningLight(self,mode):
         self.warning_light = mode
     def displayLight(self):
-        print(f"hoho: {self.warning_light}")
         if (self.warning_light == 1):
-            while True:
-                GPIO.output(self.lightPins[1],GPIO.LOW)
-                time.sleep(0.5)
-                GPIO.output(self.lightPins[1],GPIO.HIGH)
-                time.sleep(0.5)
+            time.sleep(0.3)
+            GPIO.output(self.lightPins[1],GPIO.LOW)
+            time.sleep(0.3)
+            GPIO.output(self.lightPins[1],GPIO.HIGH)
         else:
             GPIO.output(self.lightPins[1],GPIO.HIGH)
 
@@ -67,16 +72,12 @@ class Rpi4(object):
         self.joystick.direction()
         self.stateMachine(self.joystick.getData())
 
-
-    def loop(self):
+    def loop_with_mqtt(self):
         while True:
-
             self.joystick.direction()
             self.stateMachine(joystick.getData())
-            print(f"data is  {self.parking_data}")
-            time.sleep(1)
-            print("\n\n",sensor.toString())
-            time.sleep(1)
+            data = ' '.join(str(i) for i in self.parking_data) +"\n"+ sensor.toString()
+            self.mqttClient.run_publish(self.topic,data)
             self.run_display()
 
     def destroy(self):
@@ -87,6 +88,6 @@ if __name__ == '__main__':
     joystick = joystick.JoyStick()
     rpi = Rpi4(sensor,joystick)
     try:
-        rpi.loop()
+        rpi.loop_with_mqtt()
     except KeyboardInterrupt:
         rpi.destroy()
