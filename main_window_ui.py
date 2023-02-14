@@ -81,6 +81,6 @@ class Ui_MainWindow(object):
         self.parkingLot5.setText(_translate("MainWindow", "5"))
         self.warnOnButton.setText(_translate("MainWindow", "Warn On"))
         self.warnOffButton.setText(_translate("MainWindow", "Warn Off"))
-        self.message_to_displace.setPlainText(_translate("MainWindow", "Send Command\n"
+        self.message_to_displace.setPlainText(_translate("MainWindow", "\n"
 ""))
         self.messageButton.setText(_translate("MainWindow", "send"))
