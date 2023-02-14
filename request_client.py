@@ -51,20 +51,18 @@ class MqttClient(QThread):
     """
     def subscribe(self,client,topic):
         def on_message(client,userdata,msg):
-            message = msg.payload.decode()
-            self.messageReceived.emit(message)
+            decrypted_message = self.encryption.generateCipher().decrypt(msg.payload).decode()
+            self.messageReceived.emit(decrypted_message)
 
         def on_message_response(client,userdata,msg):
-            message = msg.payload.decode()
+            decrypted_message = self.encryption.generateCipher().decrypt(msg.payload).decode()
             #print(f"[Received Message from GUI with topic `{topic}`]: \nmessage: {message}")
-            self.message_to_rpi = message
+            self.message_to_rpi = decrypted_message
 
         if topic == self.topic:
-            print(topic)
             client.subscribe(topic)
             client.on_message = on_message
         elif topic == self.topic1:
-            print(topic)
             client.subscribe(topic)
             client.on_message = on_message_response
 
@@ -72,14 +70,16 @@ class MqttClient(QThread):
         publish function take mqtt_client and a string message as parameters, publish message to broker
     """
     def publish(self,client,topic,msg):
+        
+        encrypted_msg = self.encryption.generateCipher().encrypt(msg.encode())
         if topic == self.topic:
             time.sleep(1)
-            client.publish(topic,msg)
+            client.publish(topic,encrypted_msg)
             #print(f"[Sending Message from RPI with topic `{topic}`]: \n{msg}")
 
         else:
             #print(f"[Sending Message from GUI with topic `{topic}`] :\n")
-            client.publish(topic,msg)
+            client.publish(topic,encrypted_msg)
             #print(f"Message to RPI is:{msg}")
 
 

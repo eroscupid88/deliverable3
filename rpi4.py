@@ -47,14 +47,12 @@ class Rpi4(object):
         GPIO.output(self.lightPins[2],GPIO.HIGH)
 
     def setWarningLight(self,mode):
-        print("called")
         self.warning_light = mode
     def displayLight(self):
-        print(self.warning_light)
         if (self.warning_light == 1):
-            time.sleep(0.3)
+            time.sleep(0.1)
             GPIO.output(self.lightPins[1],GPIO.LOW)
-            time.sleep(0.3)
+            time.sleep(0.1)
             GPIO.output(self.lightPins[1],GPIO.HIGH)
         else:
             GPIO.output(self.lightPins[1],GPIO.HIGH)

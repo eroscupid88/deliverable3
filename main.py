@@ -29,9 +29,9 @@ class MainWindow(QtWidgets.QMainWindow,main_window_ui.Ui_MainWindow):
 
 
     def sendWarnOnLight(self):
-        self.client.run_publish(self.topic1,1)
+        self.client.run_publish(self.topic1,"1")
     def sendWarnOffLight(self):
-        self.client.run_publish(self.topic1,0) 
+        self.client.run_publish(self.topic1,"0") 
     def setParkingLot(self,data):
         self.parkingLot = data
 
