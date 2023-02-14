@@ -61,13 +61,14 @@ class MqttClient(QThread):
     def subscribe(self,client,rpi):
         def on_message(client,userdata,msg):
             message = msg.payload.decode()
-            print(f"[Received Message from RPI]: \n{message}")
             self.messageReceived.emit(message)
             #client.disconnect()
 
         def on_message_response(client,userdata,msg):
             message = msg.payload.decode()
             print(f"[Received Message from GUI]: \n{message}")
+            rpi.setWarningLight(int(message))
+            rpi.run_display()
 
         if rpi== None:
             client.subscribe(self.topic)
@@ -89,10 +90,12 @@ class MqttClient(QThread):
                 msg = msg + '\n' + rpi.sensor.toString()
                 client.publish(self.topic,msg)
                 print(f"[Sending Message from RPI]: \n{msg}")
+                self.subscribe(client,rpi)
 
         else:
             print(f"[Sending Message from GUI] :\n")
             client.publish(self.topic1,msg)
+            print(f"Message to RPI is:{msg}")
 
 
     def run_publish(self,msg):
@@ -102,9 +105,9 @@ class MqttClient(QThread):
         #self.client.loop_forever()
 
     def run(self):
-        #self.client.loop_start()
+        self.client.loop_start()
         self.subscribe(self.client,self.rpi)
-        self.client.loop_forever()
+        #self.client.loop_forever()
 
     def disconnect(self):
         pass

@@ -42,8 +42,13 @@ class Rpi4(object):
     def setWarningLight(self,mode):
         self.warning_light = mode
     def displayLight(self):
+        print(f"hoho: {self.warning_light}")
         if (self.warning_light == 1):
-            GPIO.output(self.lightPins[1],GPIO.LOW)
+            while True:
+                GPIO.output(self.lightPins[1],GPIO.LOW)
+                time.sleep(0.5)
+                GPIO.output(self.lightPins[1],GPIO.HIGH)
+                time.sleep(0.5)
         else:
             GPIO.output(self.lightPins[1],GPIO.HIGH)
 

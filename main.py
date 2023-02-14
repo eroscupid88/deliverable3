@@ -27,8 +27,9 @@ class MainWindow(QtWidgets.QMainWindow,main_window_ui.Ui_MainWindow):
         
 
 
-    def sendWarnOnLight(self,number):
-        print(f"send warn on light!!!{number}")
+    def sendWarnOnLight(self):
+        print(f"send warn on light!!")
+        self.client.run_publish("1")
         
     def setParkingLot(self,data):
         self.parkingLot = data
@@ -41,7 +42,6 @@ class MainWindow(QtWidgets.QMainWindow,main_window_ui.Ui_MainWindow):
 
     def showParkingLot(self):
         for index,value in enumerate(self.parkingLot):
-            print(index, value)
             self.dic[index].setChecked(value)
     def sendWarnOffLight(self):
         print("send warn off light!!!")
@@ -49,10 +49,10 @@ class MainWindow(QtWidgets.QMainWindow,main_window_ui.Ui_MainWindow):
     def displaySensorData(self,message):
         messages = re.split("\n",message)
         parking_data = [i for i in re.split(' ',messages[0])]
+
         sensor = '\n'.join(messages[1:len(messages)])
-        print(parking_data)
-        print(messages)
         self.displaySensorDataMessage.setText(sensor)
+        self.showParkingLot()
 
     def sendCommand(self):
         print("send command to rpi4")
