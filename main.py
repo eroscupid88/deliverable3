@@ -41,7 +41,8 @@ class MainWindow(QtWidgets.QMainWindow,main_window_ui.Ui_MainWindow):
     
     def displaySensorData(self,message):
         messages = re.split("\n",message)
-        self.parking_data = [int(i) for i in re.split(' ',messages[0])]
+        print(messages[0])
+        self.setParkingLot([int(i) for i in re.split(' ',messages[0])])
         sensor = '\n'.join(messages[1:len(messages)])
         self.displaySensorDataMessage.setText(sensor)
         self.showParkingLot()
@@ -49,6 +50,7 @@ class MainWindow(QtWidgets.QMainWindow,main_window_ui.Ui_MainWindow):
     def sendCommand(self):
         message = self.message_to_displace.toPlainText()
         self.client.run_publish(self.topic1,message)
+        self.message_to_displace.clear()
 
 
 if __name__ == "__main__":
