@@ -90,9 +90,12 @@ class MqttClient(QThread):
     def run(self):
         self.client.loop_start()
         self.subscribe(self.client,self.topic)
-
+    
     def disconnect(self):
         pass
+
+
+
 if __name__ == '__main__':
     broker = '10.64.98.135'
     port = 1883
