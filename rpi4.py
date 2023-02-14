@@ -28,7 +28,7 @@ class Rpi4(object):
         self.joystick = joystick
         self.board_message = ''
         self.sensor_data = ''
-        self.warning_light = 1
+        self.warning_light = 0
         self.parking_data = [0,0,0,0,0]    
         #initial variables fro GPIO
         self.lightPins = (12,13,16)
@@ -47,8 +47,10 @@ class Rpi4(object):
         GPIO.output(self.lightPins[2],GPIO.HIGH)
 
     def setWarningLight(self,mode):
+        print("called")
         self.warning_light = mode
     def displayLight(self):
+        print(self.warning_light)
         if (self.warning_light == 1):
             time.sleep(0.3)
             GPIO.output(self.lightPins[1],GPIO.LOW)
@@ -56,29 +58,31 @@ class Rpi4(object):
             GPIO.output(self.lightPins[1],GPIO.HIGH)
         else:
             GPIO.output(self.lightPins[1],GPIO.HIGH)
-
-    def displayBoard(self,message):
+    def setBoardMessage(self,message):
         self.board_message = message
-
-    def stateMachine(self,parking_data):
+    def displayBoard(self):
+        print(f"[Display Board] : {self.board_message} \n")
+    def setParkingData(self,parking_data):
         self.parking_data = parking_data
-        self.setWarningLight(1)
 
     def run_display(self):
         self.displayLight()
-        self.displayBoard(self.board_message)
-
-    def sendData(self):
-        self.joystick.direction()
-        self.stateMachine(self.joystick.getData())
+        self.displayBoard()
 
     def loop_with_mqtt(self):
         while True:
             self.joystick.direction()
-            self.stateMachine(joystick.getData())
+            self.setParkingData(joystick.getData())
             data = ' '.join(str(i) for i in self.parking_data) +"\n"+ sensor.toString()
             self.mqttClient.run_publish(self.topic,data)
+            self.mqttClient.subscribe(self.mqttClient.client,self.topic1)
+            if (self.mqttClient.message_to_rpi.isdigit()):
+                self.setWarningLight(int(self.mqttClient.message_to_rpi))
+            else:
+                self.setBoardMessage(self.mqttClient.message_to_rpi)
+
             self.run_display()
+
 
     def destroy(self):
         GPIO.output(self.lightPins,GPIO.HIGH)

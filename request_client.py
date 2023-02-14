@@ -20,6 +20,7 @@ class MqttClient(QThread):
         self.light_command = 0
         self.received_message = ''
         self.topic1 = topic1
+        self.message_to_rpi = ''
         self.client_id = f'dtv782-{name}-client-mqtt-{random.randint(1000,2000)}'
         self.client = self.connect_mqtt()
        
@@ -55,15 +56,17 @@ class MqttClient(QThread):
 
         def on_message_response(client,userdata,msg):
             message = msg.payload.decode()
-            print(f"[Received Message from GUI with topic `{topic}`]: \n{message}")
+            #print(f"[Received Message from GUI with topic `{topic}`]: \nmessage: {message}")
+            self.message_to_rpi = message
 
         if topic == self.topic:
+            print(topic)
             client.subscribe(topic)
             client.on_message = on_message
         elif topic == self.topic1:
             print(topic)
-           # client.subscribe(topic)
-          #  client.on_message = on_message_response
+            client.subscribe(topic)
+            client.on_message = on_message_response
 
     """
         publish function take mqtt_client and a string message as parameters, publish message to broker
@@ -71,33 +74,22 @@ class MqttClient(QThread):
     def publish(self,client,topic,msg):
         if topic == self.topic:
             time.sleep(1)
-
-            client.subscribe(self.topic1)
             client.publish(topic,msg)
             #print(f"[Sending Message from RPI with topic `{topic}`]: \n{msg}")
 
-
         else:
-            print(f"[Sending Message from GUI with topic `{topic}`] :\n")
+            #print(f"[Sending Message from GUI with topic `{topic}`] :\n")
             client.publish(topic,msg)
-            print(f"Message to RPI is:{msg}")
+            #print(f"Message to RPI is:{msg}")
 
 
     def run_publish(self,topic,msg):
         self.client.loop_start()
         self.publish(self.client,topic,msg)
-        if topic == self.topic
-            self.subscribe(self.client,topic)
-        #self.client.loop_forever()
 
     def run(self):
         self.client.loop_start()
         self.subscribe(self.client,self.topic)
-        #self.client.loop_forever()
-
-    def run_sub(self):
-        self.client.loop_start()
-        self.subscribe(self.client,self.topic1)
 
     def disconnect(self):
         pass
@@ -108,7 +100,7 @@ if __name__ == '__main__':
     topic = 'CME466-deliverable3'
     client =MqttClient(broker,port,topic,name)
     try:
-        client.run_publish(None)
+        client.run_publish(topic,"test")
     except KeyboardInterrupt:
         client.disconnect()
 
