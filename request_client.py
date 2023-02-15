@@ -60,6 +60,7 @@ class MqttClient(QThread):
             decrypted_message = self.encryption.generateCipher().decrypt(msg.payload).decode()
             #print(f"[Received Message from GUI with topic `{topic}`]: \nmessage: {message}")
             self.message_to_rpi = decrypted_message
+
         if topic == self.topic:
             client.subscribe(topic)
             client.on_message = on_message
@@ -83,28 +84,17 @@ class MqttClient(QThread):
             client.publish(topic,encrypted_msg)
             #print(f"Message to RPI is:{msg}")
 
-    """
-        run_publish function is called when client want to publish a custom topic with custom message
-    """
+
     def run_publish(self,topic,msg):
         self.client.loop_start()
         self.publish(self.client,topic,msg)
-    """
-        this function is called by client to subscribe
-    """
+
     def run(self):
         self.client.loop_start()
         self.subscribe(self.client,self.topic)
-    """
-        disconnect function to disconnect mqtt client to broker server
-    """
+
     def disconnect(self):
-        self.client.disconnect()
-
-"""
-    main function called when this file running independently
-
-"""
+        pass
 if __name__ == '__main__':
     broker = '10.64.98.135'
     port = 1883
