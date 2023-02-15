@@ -28,7 +28,7 @@ class JoyStick(object):
     """
     def setup(self):
 	    self.ADC.setup(0x48)
-
+    
     def setMode(self):
         if self.mode == 0:
             self.mode = 1

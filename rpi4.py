@@ -4,26 +4,28 @@ import joystick
 import time
 import encryption
 import RPi.GPIO as GPIO
-from enum import Enum
 import request_client
 
-class State(Enum):
-    PARKING_CONTROL = 1
-    READING_SENSOR = 2
-    DISPLAY = 3
 
-
+"""
+    rpi4 class
+"""
 class Rpi4(object):
+    """
+        variables
+    """
     broker ='10.64.98.135'
     port = 1883
     name = 'publish'
     topic = 'CME466-deliverable3'
     topic1 = 'another-topic'
 
+    """
+        constructor
+    """
     def __init__(self,sensor,joystick):
         super().__init__()
         self.mqttClient = request_client.MqttClient(self.broker,self.port,self.topic,self.topic1,self.name)
-        self.state = State.DISPLAY 
         self.sensor = sensor
         self.joystick = joystick
         self.board_message = ''
@@ -34,10 +36,11 @@ class Rpi4(object):
         self.lightPins = (12,13,16)
         print("initial set up RPI4")
         print(self.state.value)
-
         # initialize setup
         self.setup()
-
+    """
+        setup function initialize GPIO intput & output
+    """
     def setup(self):
         print("************RPI4 is setting up**************\n")
         GPIO.setmode(GPIO.BOARD)
@@ -46,8 +49,15 @@ class Rpi4(object):
         GPIO.output(self.lightPins[1],GPIO.HIGH) 
         GPIO.output(self.lightPins[2],GPIO.HIGH)
 
+    """
+        settle warning_light by 0 or 1. 0 is LIGHT OFF; 1 is LIGHT ON
+    """
     def setWarningLight(self,mode):
         self.warning_light = mode
+    
+    """
+        displayLight function display red light when signma
+    """
     def displayLight(self):
         if (self.warning_light == 1):
             time.sleep(0.1)
@@ -56,17 +66,34 @@ class Rpi4(object):
             GPIO.output(self.lightPins[1],GPIO.HIGH)
         else:
             GPIO.output(self.lightPins[1],GPIO.HIGH)
+    
+    """
+        settle board_message
+    """
     def setBoardMessage(self,message):
         self.board_message = message
+    
+    """
+        displayBoard function print out board_message
+    """
     def displayBoard(self):
         print(f"[Display Board] : {self.board_message} \n")
+    """
+        Setter parking_data
+    """
     def setParkingData(self,parking_data):
         self.parking_data = parking_data
 
+    """
+        run_display function display light and display board message
+    """
     def run_display(self):
         self.displayLight()
         self.displayBoard()
 
+    """
+        while loop function publish and subscribe data from or to RPI
+    """
     def loop_with_mqtt(self):
         while True:
             self.joystick.direction()
@@ -81,7 +108,9 @@ class Rpi4(object):
 
             self.run_display()
 
-
+    """
+        destroy function reset lightPins to HIGH
+    """
     def destroy(self):
         GPIO.output(self.lightPins,GPIO.HIGH)
 

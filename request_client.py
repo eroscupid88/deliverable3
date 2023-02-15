@@ -4,7 +4,9 @@ import random
 import encryption
 import time
 from PyQt5.QtCore import QThread, pyqtSignal, QObject
-
+"""
+    mqtt client class
+"""
 class MqttClient(QThread):
     messageReceived =pyqtSignal(str)
 
