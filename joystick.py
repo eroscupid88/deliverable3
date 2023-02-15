@@ -23,12 +23,13 @@ class JoyStick(object):
 
         #calling function
         self.setup()
+
     """
         setup function set up ADC with choosen address
     """
     def setup(self):
 	    self.ADC.setup(0x48)
-    
+        
     def setMode(self):
         if self.mode == 0:
             self.mode = 1

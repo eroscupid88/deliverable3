@@ -61,6 +61,6 @@ class EncryptionObject(object):
     """
     def decryptMessage(self,encryptedMessage):
         cipher = self.generateCipher()
-        return cipher.decrypt(encrytpedMessage).decode()
+        return cipher.decrypt(encryptedMessage).decode()
 
 
