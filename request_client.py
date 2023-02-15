@@ -53,11 +53,13 @@ class MqttClient(QThread):
     """
     def subscribe(self,client,topic):
         def on_message(client,userdata,msg):
-            decrypted_message = self.encryption.generateCipher().decrypt(msg.payload).decode()
+            #print(f"[encrypted message from RPI]: {msg.payload}")
+            decrypted_message = self.encryption.decryptMessage(msg.payload)
             self.messageReceived.emit(decrypted_message)
 
         def on_message_response(client,userdata,msg):
-            decrypted_message = self.encryption.generateCipher().decrypt(msg.payload).decode()
+            #print(f"[encrypted message from GUI]: {msg.payload}")
+            decrypted_message = self.encryption.decryptMessage(msg.payload)
             #print(f"[Received Message from GUI with topic `{topic}`]: \nmessage: {message}")
             self.message_to_rpi = decrypted_message
 
@@ -73,7 +75,7 @@ class MqttClient(QThread):
     """
     def publish(self,client,topic,msg):
         
-        encrypted_msg = self.encryption.generateCipher().encrypt(msg.encode())
+        encrypted_msg = self.encryption.encryptMessage(msg.encode())
         if topic == self.topic:
             time.sleep(1)
             client.publish(topic,encrypted_msg)

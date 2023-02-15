@@ -65,7 +65,7 @@ class JoyStick(object):
         if (self.ADC.read(1) > 126 and self.ADC.read(1) < 254 ):
             self.setParking(ParkingSlot.SLOT1.value)
             i = 1
-        if (self.ADC.read(0) >= 22 and self.ADC.read(0) <=27):
+        if (self.ADC.read(1) >= 0 and self.ADC.read(1) <126):
             self.setParking(ParkingSlot.SLOT2.value)
             i = 2
         if (self.ADC.read(1) == 255):
@@ -74,7 +74,7 @@ class JoyStick(object):
         if (self.ADC.read(1) ==0):
             self.setParking(ParkingSlot.SLOT4.value)
             i = 4
-        if (self.ADC.read(0) > 4 and self.ADC.read(0) <= 22):
+        if (self.ADC.read(0) > 4 and self.ADC.read(0) <= 25):
             self.setParking(ParkingSlot.SLOT5.value)
             i = 6
         return state[i]
@@ -92,6 +92,7 @@ class JoyStick(object):
                 status = tmp
             time.sleep(1)
             print(f"mode is: {self.mode}")
+            print(f"dataL {self.data}")
             
     def destroy(self):
         pass

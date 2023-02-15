@@ -35,7 +35,6 @@ class Rpi4(object):
         #initial variables fro GPIO
         self.lightPins = (12,13,16)
         print("initial set up RPI4")
-        print(self.state.value)
         # initialize setup
         self.setup()
     """
