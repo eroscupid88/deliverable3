@@ -33,7 +33,7 @@ class Rpi4(object):
         self.warning_light = 0
         self.parking_data = [0,0,0,0,0]    
         #initial variables fro GPIO
-        self.lightPins = (12,13,16)
+        self.lightPins = (40,40,40)
         print("initial set up RPI4")
         # initialize setup
         self.setup()
@@ -59,6 +59,7 @@ class Rpi4(object):
     """
     def displayLight(self):
         if (self.warning_light == 1):
+            print("light is on")
             time.sleep(0.1)
             GPIO.output(self.lightPins[1],GPIO.LOW)
             time.sleep(0.1)
