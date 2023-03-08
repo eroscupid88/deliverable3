@@ -47,12 +47,12 @@ class Rpi4(object):
     def loop_with_mqtt(self):
             # data = ' '.join(str(i) for i in self.parking_data) +"\n"+ sensor.toString()
             # if (self.response):
-        self.mqttClient.subscribe(self.mqttClient.client,self.topic1)
-        if (self.mqttClient.message_to_rpi == '1'):
-            self.received =True
-            self.takePicture()
-            elf.mqttClient.run_publish(self.topic,self.response())
-        
+        while True:
+            self.mqttClient.subscribe(self.mqttClient.client,self.topic1)
+            if (self.mqttClient.message_to_rpi == '1'):
+                self.received =True
+                self.takePicture()
+                elf.mqttClient.run_publish(self.topic,self.response())
 
     """
         destroy function reset lightPins to HIGH
