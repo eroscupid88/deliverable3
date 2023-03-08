@@ -63,6 +63,7 @@ class MqttClient(QThread):
         elif topic == self.topic1:
             client.subscribe(topic)
             client.on_message = on_message_response
+            print("????")
         # def on_message(client,userdata,msg):
         #     print(msg)
         #     self.messageReceived.emit(msg)
