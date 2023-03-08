@@ -49,8 +49,8 @@ class MqttClient(QThread):
     def subscribe(self,client,topic):
 
         def on_message(client,userdata,msg):
-            #print(f"[encrypted message from RPI]: {msg.payload}")
-            self.messageReceived.emit(msg.payload)
+            print(f"[encrypted message from RPI]: {msg.payload.decode()}")
+            self.messageReceived.emit(msg.payload.decode())
 
         def on_message_response(client,userdata,msg):
             #print(f"[Received Message from GUI with topic `{topic}`]: \nmessage: {message}")
