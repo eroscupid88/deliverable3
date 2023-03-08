@@ -95,7 +95,6 @@ class MqttClient(QThread):
     def run(self):
         self.client.loop_start()
         self.subscribe(self.client,self.topic)
-        client.loop_forever()
 
     def disconnect(self):
         pass
