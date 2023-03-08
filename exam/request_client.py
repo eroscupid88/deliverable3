@@ -50,7 +50,7 @@ class MqttClient(QThread):
 
         def on_message(client,userdata,msg):
             #print(f"[encrypted message from RPI]: {msg.payload}")
-            self.messageReceived.emit(message)
+            self.messageReceived.emit(msg)
 
         def on_message_response(client,userdata,msg):
             #print(f"[Received Message from GUI with topic `{topic}`]: \nmessage: {message}")
