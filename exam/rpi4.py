@@ -1,7 +1,7 @@
 #!urs/bin/python3
 import time
 from picamera import PiCamera
-from datetime import date
+from datetime import datetime
 
 
 """
@@ -31,7 +31,7 @@ class Rpi4(object):
         self.camera.resolution= (1280,720)
 
     def takePicture(self):
-        now = date.now()
+        now = datetime.now()
         dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
         camera.start_preview()
         self.camera.annotate_text = f"Dillon Vu \n {d1}"
