@@ -21,6 +21,7 @@ class MqttClient(QThread):
         self.message_to_rpi = ''
         self.client_id = f'dtv782-{name}-client-mqtt-{random.randint(1000,2000)}'
         self.client = self.connect_mqtt()
+        print(self.topic1)
        
 
     """
