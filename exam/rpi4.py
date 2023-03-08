@@ -2,6 +2,7 @@
 import time
 from picamera import PiCamera
 from datetime import datetime
+import request_client
 
 
 """
@@ -21,10 +22,11 @@ class Rpi4(object):
     """
     def __init__(self):
         super().__init__()
-        # self.mqttClient = request_client.MqttClient(self.broker,self.port,self.topic,self.name)
+        self.mqttClient = request_client.MqttClient(self.broker,self.port,self.topic,self.name)
         self.camera = PiCamera()
         self.setup()
         self.takePicture()
+        self.received = True
         
         
     def setup(self):
@@ -39,12 +41,15 @@ class Rpi4(object):
         self.camera.capture('./exam.jpg')
         self.camera.stop_preview()
         print(dt_string)
-        
+    def response(self):
+        return "Photo taken and saved!"
+    def receiveCommand(self):
+        return self.received
     def loop_with_mqtt(self):
         while True:
-            pass
             # data = ' '.join(str(i) for i in self.parking_data) +"\n"+ sensor.toString()
-            # self.mqttClient.run_publish(self.topic,data)
+            # if (self.response):
+            self.mqttClient.run_publish(self.topic,self.reponse)
             # self.mqttClient.subscribe(self.mqttClient.client,self.topic1)
             # if (self.mqttClient.message_to_rpi.isdigit()):
             #     self.setWarningLight(int(self.mqttClient.message_to_rpi))

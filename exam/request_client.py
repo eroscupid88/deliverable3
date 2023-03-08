@@ -1,7 +1,6 @@
 #!/urs/bin/python3
 from paho.mqtt import client as mqtt_client
 import random
-import encryption
 import time
 from PyQt5.QtCore import QThread, pyqtSignal, QObject
 """
@@ -15,14 +14,9 @@ class MqttClient(QThread):
     """
     def __init__(self,broker,port,topic,topic1,name,parent=None):
         super().__init__(parent)
-        self.encryption = encryption.EncryptionObject('filekey.key')
         self.broker =broker
         self.port = port
         self.topic =topic
-        self.light_command = 0
-        self.received_message = ''
-        self.topic1 = topic1
-        self.message_to_rpi = ''
         self.client_id = f'dtv782-{name}-client-mqtt-{random.randint(1000,2000)}'
         self.client = self.connect_mqtt()
        
@@ -53,29 +47,16 @@ class MqttClient(QThread):
     """
     def subscribe(self,client,topic):
         def on_message(client,userdata,msg):
-            #print(f"[encrypted message from RPI]: {msg.payload}")
-            decrypted_message = self.encryption.decryptMessage(msg.payload)
-            self.messageReceived.emit(decrypted_message)
-
-        def on_message_response(client,userdata,msg):
-            #print(f"[encrypted message from GUI]: {msg.payload}")
-            decrypted_message = self.encryption.decryptMessage(msg.payload)
-            #print(f"[Received Message from GUI with topic `{topic}`]: \nmessage: {message}")
-            self.message_to_rpi = decrypted_message
-
-        if topic == self.topic:
-            client.subscribe(topic)
-            client.on_message = on_message
-        elif topic == self.topic1:
-            client.subscribe(topic)
-            client.on_message = on_message_response
-
+            print(msg)
+            self.messageReceived.emit(msg)
+        client.subscribe(topic)
+        client.on_message = on_message
+        
     """
         publish function take mqtt_client and a string message as parameters, publish message to broker
     """
     def publish(self,client,topic,msg):
         
-        encrypted_msg = self.encryption.encryptMessage(msg.encode())
         if topic == self.topic:
             time.sleep(1)
             client.publish(topic,encrypted_msg)
