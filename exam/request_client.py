@@ -48,7 +48,6 @@ class MqttClient(QThread):
         return: None
     """
     def subscribe(self,client,topic):
-
         def on_message(client,userdata,msg):
             if (topic == self.topic):
                 print(f"[encrypted message from RPI]: {msg.payload.decode()}")
