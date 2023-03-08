@@ -35,25 +35,25 @@ class Rpi4(object):
     def active(self):
         self.received = True
     def takePicture(self):
-        now = datetime.now()
-        dt_string = now.strftime("%Y/%m/%d %H:%M:%S")
-        self.camera.start_preview()
-        self.camera.annotate_text = f"Dillon Vu \n {dt_string}"
-        time.sleep(5)
-        self.camera.capture('./exam.jpg')
-        self.camera.stop_preview()
-        print(dt_string)
+        if (self.received == True):
+            now = datetime.now()
+            dt_string = now.strftime("%Y/%m/%d %H:%M:%S")
+            self.camera.start_preview()
+            self.camera.annotate_text = f"Dillon Vu \n {dt_string}"
+            time.sleep(5)
+            self.camera.capture('./exam.jpg')
+            self.camera.stop_preview()
+            print(dt_string)
+            self.received= False
     def response(self):
         return "Photo taken and saved!"
-    def receiveCommand(self):
-        return self.received
     def loop_with_mqtt(self):
         while True:
             # data = ' '.join(str(i) for i in self.parking_data) +"\n"+ sensor.toString()
             # if (self.response):
             self.mqttClient.subscribe(self.mqttClient.client,self.topic1)
             if (self.mqttClient.message_to_rpi == '1'):
-                self.received = True
+                self.active()
                 self.takePicture()
                 self.mqttClient.run_publish(self.topic,self.response())
             
