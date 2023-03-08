@@ -49,7 +49,7 @@ class Rpi4(object):
             # data = ' '.join(str(i) for i in self.parking_data) +"\n"+ sensor.toString()
             # if (self.response):
             self.mqttClient.subscribe(self.mqttClient.client,self.topic1)
-            print(f'wtf {self.mqttClient.message_to_rpi} and {topic1}')
+            print(f'wtf {self.mqttClient.message_to_rpi} and {self.topic1}')
             # if (self.mqttClient.message_to_rpi == '1'):
             #     self.received =True
             #     self.takePicture()
