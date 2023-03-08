@@ -22,7 +22,6 @@ class MainWindow(QtWidgets.QMainWindow,window_ui.Ui_MainWindow):
         super(MainWindow,self).__init__()
         self.setupUi(self)
         self.pushButton.clicked.connect(self.sendCommand)
-
         self.client = request_client.MqttClient(self.broker,self.port,self.topic,self.topic1,self.name,None)
         self.client.messageReceived.connect(self.receivedSignalFromRpi)
 

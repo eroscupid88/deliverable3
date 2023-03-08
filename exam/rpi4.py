@@ -27,13 +27,11 @@ class Rpi4(object):
         self.camera = PiCamera()
         self.setup()
         self.takePicture()
-        self.received = True
+        self.received = False
         
         
     def setup(self):
         self.camera.resolution= (1280,720)
-    def active(self):
-        self.received = True
     def takePicture(self):
         if (self.received == True):
             now = datetime.now()
@@ -53,7 +51,7 @@ class Rpi4(object):
             # if (self.response):
             self.mqttClient.subscribe(self.mqttClient.client,self.topic1)
             if (self.mqttClient.message_to_rpi == '1'):
-                self.active()
+                self.received =True
                 self.takePicture()
                 self.mqttClient.run_publish(self.topic,self.response())
             
