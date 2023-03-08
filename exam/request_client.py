@@ -47,11 +47,26 @@ class MqttClient(QThread):
         return: None
     """
     def subscribe(self,client,topic):
+
         def on_message(client,userdata,msg):
-            print(msg)
-            self.messageReceived.emit(msg)
-        client.subscribe(topic)
-        client.on_message = on_message
+            #print(f"[encrypted message from RPI]: {msg.payload}")
+            self.messageReceived.emit(message)
+
+        def on_message_response(client,userdata,msg):
+            #print(f"[Received Message from GUI with topic `{topic}`]: \nmessage: {message}")
+            self.message_to_rpi = decrypted_message
+
+        if topic == self.topic:
+            client.subscribe(topic)
+            client.on_message = on_message
+        elif topic == self.topic1:
+            client.subscribe(topic)
+            client.on_message = on_message_response
+        # def on_message(client,userdata,msg):
+        #     print(msg)
+        #     self.messageReceived.emit(msg)
+        # client.subscribe(topic)
+        # client.on_message = on_message
         
     """
         publish function take mqtt_client and a string message as parameters, publish message to broker
@@ -83,7 +98,7 @@ if __name__ == '__main__':
     broker = '10.64.98.135'
     port = 1883
     name = 'subscribe'
-    topic = 'CME466-deliverable3'
+    topic = 'CME466-exam'
     topic1 ='from GUI'
     client =MqttClient(broker,port,topic,topic1,name)
     try:
