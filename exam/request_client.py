@@ -80,9 +80,10 @@ class MqttClient(QThread):
             print(f"[Sending Message from RPI with topic `{topic}`]: \n{msg}")
 
         else:
-            #print(f"[Sending Message from GUI with topic `{topic}`] :\n")
+            print(f"[Sending Message from GUI with topic `{topic}`] :\n")
+            time.sleep(1)
             client.publish(topic,msg)
-            #print(f"Message to RPI is:{msg}")
+            print(f"Message to RPI is:{msg}")
 
 
     def run_publish(self,topic,msg):
