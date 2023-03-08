@@ -34,10 +34,11 @@ class Rpi4(object):
         now = datetime.now()
         dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
         self.camera.start_preview()
-        self.camera.annotate_text = f"Dillon Vu \n {d1}"
+        self.camera.annotate_text = f"Dillon Vu \n {dt_string}"
         time.sleep(5)
         self.camera.capture('./exam.jpg')
         self.camera.stop_preview()
+        print(dt_string)
         
     def loop_with_mqtt(self):
         while True:
