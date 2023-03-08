@@ -53,13 +53,10 @@ class MqttClient(QThread):
             if (topic == self.topic):
                 print(f"[encrypted message from RPI]: {msg.payload.decode()}")
                 self.messageReceived.emit(msg.payload.decode())
+                self.message_to_rpi = msg.payload.decode()
             else:
                 print(f"[Received Message from GUI with topic `{topic}`]: \nmessage: {msg.payload.decode()}")
                 self.message_to_rpi = msg.payload.decode()
-
-        def on_message_response(client,userdata,msg):
-            print(f"[Received Message from GUI with topic `{topic}`]: \nmessage: {msg.payload.decode()}")
-            self.message_to_rpi = msg.payload.decode()
 
         # if topic == self.topic:
         client.subscribe(topic)
@@ -84,11 +81,11 @@ class MqttClient(QThread):
             client.publish(topic,msg)
             print(f"[Sending Message from RPI with topic `{topic}`]: \n{msg}")
 
-        else:
-            print(f"[Sending Message from GUI with topic `{topic}`] :\n")
-            time.sleep(1)
-            client.publish(topic,msg)
-            print(f"Message to RPI is:{msg}")
+        # else:
+        #     print(f"[Sending Message from GUI with topic `{topic}`] :\n")
+        #     time.sleep(1)
+        #     client.publish(topic,msg)
+        #     print(f"Message to RPI is:{msg}")
 
 
     def run_publish(self,topic,msg):

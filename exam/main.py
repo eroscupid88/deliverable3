@@ -30,7 +30,7 @@ class MainWindow(QtWidgets.QMainWindow,window_ui.Ui_MainWindow):
 
     
     def sendCommand(self):
-        self.client.run_publish(self.topic1,"1")
+        self.client.run_publish(self.topic,"1")
         print("RPI taking photo")
 
     def receivedSignalFromRpi(self,message):
