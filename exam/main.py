@@ -1,6 +1,6 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 import sys
-import main_window_ui
+import window_ui
 from PyQt5.QtWidgets import QMessageBox
 import request_client
 import re
@@ -9,7 +9,7 @@ import re
 """
     main class
 """
-class MainWindow(QtWidgets.QMainWindow,main_window_ui.Ui_MainWindow):
+class MainWindow(QtWidgets.QMainWindow,window_ui.Ui_MainWindow):
     broker = '10.64.98.135'
     port = 1883
     name = 'publisher'
