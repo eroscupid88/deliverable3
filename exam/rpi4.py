@@ -33,7 +33,7 @@ class Rpi4(object):
     def takePicture(self):
         now = datetime.now()
         dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
-        camera.start_preview()
+        self.camera.start_preview()
         self.camera.annotate_text = f"Dillon Vu \n {d1}"
         time.sleep(5)
         self.camera.capture('./exam.jpg')
