@@ -67,7 +67,7 @@ class Rpi4(object):
 
 if __name__ == '__main__':
     rpi = Rpi4()
-    # try:
-    #     rpi.loop_with_mqtt()
-    # except KeyboardInterrupt:
-    #     rpi.destroy()
+    try:
+        rpi.loop_with_mqtt()
+    except KeyboardInterrupt:
+        rpi.destroy()
