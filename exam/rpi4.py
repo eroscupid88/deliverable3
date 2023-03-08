@@ -1,6 +1,5 @@
 #!urs/bin/python3
 import time
-import request_client
 from picamera import PiCamera
 from datetime import date
 
