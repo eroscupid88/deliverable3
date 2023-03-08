@@ -22,7 +22,7 @@ class Rpi4(object):
     """
     def __init__(self):
         super().__init__()
-        self.mqttClient = request_client.MqttClient(self.broker,self.port,self.topic,self.name)
+        # self.mqttClient = request_client.MqttClient(self.broker,self.port,self.topic,self.name)
         self.camera = PiCamera()
         self.setup()
         
