@@ -31,6 +31,7 @@ class Rpi4(object):
         self.camera.resolution= (1280,720)
 
     def takePicture(self):
+        today = date.today()
         d1 = today.strftime("%d/%m/%Y")
         self.camera.annotate_text = f"Dillon Vu \n {d1}"
         print(d1)
