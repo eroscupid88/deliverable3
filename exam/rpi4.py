@@ -32,6 +32,7 @@ class Rpi4(object):
     def takePicture(self):
         d1 = today.strftime("%d/%m/%Y")
         self.camera.annotate_text = f"Dillon Vu \n {d1}"
+        print(d1)
         
     def loop_with_mqtt(self):
         while True:
