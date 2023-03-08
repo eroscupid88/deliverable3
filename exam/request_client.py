@@ -12,7 +12,7 @@ class MqttClient(QThread):
     """
         construction
     """
-    def __init__(self,broker,port,topic,topic1,name,parent=None):
+    def __init__(self,broker,port,topic,name,parent=None):
         super().__init__(parent)
         self.broker =broker
         self.port = port
