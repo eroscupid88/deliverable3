@@ -24,6 +24,7 @@ class Rpi4(object):
         # self.mqttClient = request_client.MqttClient(self.broker,self.port,self.topic,self.name)
         self.camera = PiCamera()
         self.setup()
+        self.takePicture()
         
         
     def setup(self):
