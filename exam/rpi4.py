@@ -32,7 +32,8 @@ class Rpi4(object):
         
     def setup(self):
         self.camera.resolution= (1280,720)
-
+    def active(self):
+        self.received = True
     def takePicture(self):
         now = datetime.now()
         dt_string = now.strftime("%Y/%m/%d %H:%M:%S")
@@ -50,13 +51,12 @@ class Rpi4(object):
         while True:
             # data = ' '.join(str(i) for i in self.parking_data) +"\n"+ sensor.toString()
             # if (self.response):
-            self.mqttClient.run_publish(self.topic,self.response())
-            # self.mqttClient.subscribe(self.mqttClient.client,self.topic1)
-            # if (self.mqttClient.message_to_rpi.isdigit()):
-            #     self.setWarningLight(int(self.mqttClient.message_to_rpi))
-            # else:
-            #     self.setBoardMessage(self.mqttClient.message_to_rpi)
-
+            self.mqttClient.subscribe(self.mqttClient.client,self.topic1)
+            if (self.mqttClient.message_to_rpi == '1'):
+                self.received = True
+                self.takePicture()
+                self.mqttClient.run_publish(self.topic,self.response())
+            
             # self.run_display()
 
     """

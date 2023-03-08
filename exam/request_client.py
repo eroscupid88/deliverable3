@@ -18,6 +18,7 @@ class MqttClient(QThread):
         self.port = port
         self.topic =topic
         self.topic1 = topic1
+        self.message_to_rpi = ''
         self.client_id = f'dtv782-{name}-client-mqtt-{random.randint(1000,2000)}'
         self.client = self.connect_mqtt()
        
@@ -53,8 +54,8 @@ class MqttClient(QThread):
             self.messageReceived.emit(msg.payload.decode())
 
         def on_message_response(client,userdata,msg):
-            #print(f"[Received Message from GUI with topic `{topic}`]: \nmessage: {message}")
-            self.message_to_rpi = decrypted_message
+            print(f"[Received Message from GUI with topic `{topic}`]: \nmessage: {msg.payload.decode()}")
+            self.message_to_rpi = msg.payload.decode()
 
         if topic == self.topic:
             client.subscribe(topic)
