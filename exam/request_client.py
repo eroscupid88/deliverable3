@@ -12,11 +12,12 @@ class MqttClient(QThread):
     """
         construction
     """
-    def __init__(self,broker,port,topic,name,parent=None):
+    def __init__(self,broker,port,topic,topic1,name,parent=None):
         super().__init__(parent)
         self.broker =broker
         self.port = port
         self.topic =topic
+        self.topic1 = topic1
         self.client_id = f'dtv782-{name}-client-mqtt-{random.randint(1000,2000)}'
         self.client = self.connect_mqtt()
        
@@ -59,12 +60,12 @@ class MqttClient(QThread):
         
         if topic == self.topic:
             time.sleep(1)
-            client.publish(topic,encrypted_msg)
-            #print(f"[Sending Message from RPI with topic `{topic}`]: \n{msg}")
+            client.publish(topic,msg)
+            print(f"[Sending Message from RPI with topic `{topic}`]: \n{msg}")
 
         else:
             #print(f"[Sending Message from GUI with topic `{topic}`] :\n")
-            client.publish(topic,encrypted_msg)
+            client.publish(topic,msg)
             #print(f"Message to RPI is:{msg}")
 
 
@@ -83,7 +84,8 @@ if __name__ == '__main__':
     port = 1883
     name = 'subscribe'
     topic = 'CME466-deliverable3'
-    client =MqttClient(broker,port,topic,name)
+    topic1 ='from GUI'
+    client =MqttClient(broker,port,topic,topic1,name)
     try:
         client.run_publish(topic,"test")
     except KeyboardInterrupt:

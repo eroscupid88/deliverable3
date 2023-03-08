@@ -16,13 +16,14 @@ class Rpi4(object):
     port = 1883
     name = 'publish'
     topic = 'CME466-exam'
+    topic1 ='from GUI'
 
     """
         constructor
     """
     def __init__(self):
         super().__init__()
-        self.mqttClient = request_client.MqttClient(self.broker,self.port,self.topic,self.name)
+        self.mqttClient = request_client.MqttClient(self.broker,self.port,self.topic,self.topic1,self.name)
         self.camera = PiCamera()
         self.setup()
         self.takePicture()
